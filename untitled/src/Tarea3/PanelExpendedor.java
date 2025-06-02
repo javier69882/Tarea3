@@ -3,7 +3,7 @@ package Tarea3;
 import javax.swing.*;
 import java.awt.*;
 
-public class PanelExpendedor extends JPanel {
+public class PanelExpendedor extends JPanel{
 
     private ImageIcon[] productos;
     private JButton[] botonesSeleccion;
@@ -33,18 +33,28 @@ public class PanelExpendedor extends JPanel {
         super.paintComponent(g);
 
         int panelWidth = this.getWidth();
-        int panelHeight = this.getHeight();
 
+        // panel de información del expendedor
+        int boxWidth = 110;
+        int boxHeight = 50;
+        int boxX = panelWidth - boxWidth - 1;
+        int boxY = 0;
+
+        g.setColor(Color.white);
+        g.fillRect(boxX, boxY, boxWidth, boxHeight);
+        g.setColor(Color.black);
+        g.drawRect(boxX, boxY, boxWidth, boxHeight);
+
+        // --- Resto del dibujo del expendedor y productos ---
+        int panelHeight = this.getHeight();
         int rectWidth = 120, rectHeight = 500;
         int offsetX = 20;
         int rectX = (panelWidth - rectWidth) / 2 - offsetX;
         int rectY = (panelHeight - rectHeight) / 2;
 
-        // Dibujar rectángulo del expendedor
         g.setColor(Color.darkGray);
         g.fillRect(rectX, rectY, rectWidth, rectHeight);
 
-        // Dibujar imágenes y posicionar botones
         int imageWidth = 100;
         int imageHeight = 80;
         int espacio = 10;
@@ -54,10 +64,8 @@ public class PanelExpendedor extends JPanel {
             int xImg = rectX + (rectWidth - imageWidth) / 2;
             int yImg = rectY + espacio + i * (imageHeight + espacio);
 
-            // Dibujar imagen
             g.drawImage(img, xImg, yImg, imageWidth, imageHeight, this);
 
-            // Posicionar botón al lado derecho de la imagen
             int xBtn = xImg + imageWidth + 10;
             int yBtn = yImg + (imageHeight - 30) / 2;
             botonesSeleccion[i].setBounds(xBtn, yBtn, 40, 30);

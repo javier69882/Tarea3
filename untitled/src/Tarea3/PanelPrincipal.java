@@ -16,7 +16,7 @@ public class PanelPrincipal extends JPanel {
         exp = new PanelExpendedor();
         exp.setBounds(400, 100, 300, 600); // Posición y tamaño del PanelExpendedor
         com = new PanelComprador();
-        com.setBounds(20, 100, 200, 400); // Posición y tamaño del PanelComprador
+        com.setBounds(20, 100, 200, 600); // Posición y tamaño del PanelComprador
         // Agregar componentes al panel
 
         this.add(exp); // Agregar el PanelExpendedor
