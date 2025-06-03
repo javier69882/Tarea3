@@ -5,11 +5,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
 public class PanelComprador extends JPanel {
 
     private JButton botonComprar;
     private JPanel inventario;
     private boolean inventarioVisible;
+    private JButton[] botonesMonedas = new JButton[4]; // 4 monedas
+    private JLabel mochila;
 
     private JButton botonMochila;
     private JPanel mochilaPanel;
@@ -17,8 +20,9 @@ public class PanelComprador extends JPanel {
 
 
     public PanelComprador() {
-        this.setBackground(Color.white);
-        this.setLayout(null); // Diseño absoluto
+        this.setOpaque(false); // Fondo transparente
+        this.setLayout(null);
+
 
         // Botón "Mi billetera"
         botonComprar = new JButton("Mi billetera");
@@ -33,14 +37,17 @@ public class PanelComprador extends JPanel {
         inventario.setVisible(false);
 
         String[] nombresImagenes = {"100.png", "500.png", "1000.png", "1500.png"};
-        for (String nombreImagen : nombresImagenes) {
+        for (int i = 0; i < nombresImagenes.length; i++) {
             JButton botonFoto = new JButton();
-            ImageIcon iconoOriginal = new ImageIcon(getClass().getResource("/monedas/" + nombreImagen));
+            ImageIcon iconoOriginal = new ImageIcon(getClass().getResource("/monedas/" + nombresImagenes[i]));
             Image imagenRedimensionada = iconoOriginal.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
             botonFoto.setIcon(new ImageIcon(imagenRedimensionada));
             botonFoto.setFocusable(false);
             inventario.add(botonFoto);
+            botonesMonedas[i] = botonFoto; // almacenar el botón en el array
         }
+
+
 
         botonComprar.addActionListener(new ActionListener() {
             @Override
@@ -61,7 +68,7 @@ public class PanelComprador extends JPanel {
             }
         });
 
-
+// Panel para la mochila
         mochilaPanel = new JPanel();
         mochilaPanel.setBounds(20, 350, 160, 160);
         mochilaPanel.setBackground(Color.gray);
@@ -81,6 +88,9 @@ public class PanelComprador extends JPanel {
         this.add(mochilaPanel);
 
 
+    }
+    public JButton[] getBotonesMonedas() {
+        return botonesMonedas;
     }
 
     @Override

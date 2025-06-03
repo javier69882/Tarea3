@@ -5,7 +5,7 @@ package Tarea1;
  * Realiza la compra de un producto en el expendedor , almacena el sonido del producto y toma el vuelto
  */
 
-class Comprador {
+public class Comprador {
     private String sonido;
     private int vuelto;
 // reemplazo cualBebida por cual Producto

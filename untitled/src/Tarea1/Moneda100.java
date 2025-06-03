@@ -4,7 +4,7 @@ package Tarea1;
  * Clase que representa una moneda de 100 pesos.
  * Extiende la clase {@link Moneda}.
  */
-class Moneda100 extends Moneda {
+public class Moneda100 extends Moneda {
     /**
      * Constructor de Moneda100.
      * Llama al constructor de la clase padre {@link Moneda}.

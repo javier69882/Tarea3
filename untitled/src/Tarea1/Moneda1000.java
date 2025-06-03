@@ -4,7 +4,7 @@ package Tarea1;
  * Extiende la clase {@link Moneda}
  */
 
-class Moneda1000 extends Moneda{
+public class Moneda1000 extends Moneda{
     /**
      * Constructor de Moneda1000
      * Llama al constructor de la clase padre {@link Moneda}

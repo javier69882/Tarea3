@@ -4,7 +4,7 @@ package Tarea1;
  * Clase abstracta moneda
  * Implementa la interfaz {@link Comparable} para usar el metodo {@code compareTo}
  */
-abstract class Moneda implements Comparable<Moneda>{
+public abstract class Moneda implements Comparable<Moneda>{
 
     /**
      * Constructor vacio de Moneda
