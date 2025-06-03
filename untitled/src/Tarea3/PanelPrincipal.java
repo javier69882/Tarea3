@@ -13,6 +13,10 @@ public class PanelPrincipal extends JPanel {
     private PrecioProducto productoSeleccionado = null;
     private Image fondo;
 
+    private String mensajeEstado = "";
+    private String productoEntregado = "";
+    private int vuelto = 0;
+
     public PanelPrincipal() {
         this.setBackground(Color.white);
         this.setLayout(null); // Diseño absoluto
@@ -26,7 +30,6 @@ public class PanelPrincipal extends JPanel {
         exp.setBounds(400, 0, 450, 792); // Posición y tamaño del PanelExpendedor
         com = new PanelComprador();
         com.setBounds(20, 100, 200, 600); // Posición y tamaño del PanelComprador
-        // Agregar componentes al panel
 
         this.add(exp); // Agregar el PanelExpendedor
         this.add(com); // Agregar el PanelComprador
@@ -56,26 +59,61 @@ public class PanelPrincipal extends JPanel {
                 intentarCompra();
             });
         }
-
-
-
-
     }
 
     private void intentarCompra() {
         if (monedaSeleccionada != null && productoSeleccionado != null) {
             try {
                 Comprador comprador = new Comprador(monedaSeleccionada, productoSeleccionado, expendedorLogico);
-                JOptionPane.showMessageDialog(this, "Compraste: " + comprador.queAccionProducto() + "\nVuelto: " + comprador.cuantoVuelto());
+                // Mostrar mensajes en panel
+                exp.setMensajeEstado("Compra exitosa!");
+                String producto = comprador.queAccionProducto();
+                exp.setProductoEntregado(producto);
+                exp.setVuelto(comprador.cuantoVuelto());
+                setProductoEnMochila(mapearNombreProducto(producto));
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+                exp.setMensajeEstado("Error: " + e.getMessage());
+                exp.setProductoEntregado("");
+                exp.setVuelto(0);
+                setProductoEnMochila(""); // Limpia la mochila si hay error
             }
-            // Resetea para la próxima compra
+            // Resetear selección para la próxima compra
             monedaSeleccionada = null;
             productoSeleccionado = null;
             exp.setValorMonedaSeleccionada(0);
             exp.setProductoSeleccionado(null);
         }
+    }
+
+    // Método para actualizar la mochila en el PanelComprador
+    public void setProductoEnMochila(String producto) {
+        com.setProductoEnMochila(producto);
+    }
+
+    public void setMensajeEstado(String mensaje) {
+        this.mensajeEstado = mensaje;
+        repaint();
+    }
+
+    public void setProductoEntregado(String producto) {
+        this.productoEntregado = producto;
+        repaint();
+    }
+
+    public void setVuelto(int vuelto) {
+        this.vuelto = vuelto;
+        repaint();
+    }
+
+    private String mapearNombreProducto(String nombreOriginal) {
+        return switch (nombreOriginal.toLowerCase()) {
+            case "coca" -> "COCA";
+            case "fanta" -> "FANTA";
+            case "sprite" -> "SPRITE";
+            case "super8" -> "SUPER8";
+            case "snikers" -> "SNIKERS";
+            default -> "";
+        };
     }
 
     @Override

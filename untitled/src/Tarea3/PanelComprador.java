@@ -4,25 +4,26 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.util.HashMap;
+import java.util.Map;
 
 public class PanelComprador extends JPanel {
 
     private JButton botonComprar;
     private JPanel inventario;
     private boolean inventarioVisible;
-    private JButton[] botonesMonedas = new JButton[4]; // 4 monedas
-    private JLabel mochila;
+    private JButton[] botonesMonedas = new JButton[4];
 
     private JButton botonMochila;
     private JPanel mochilaPanel;
     private boolean mochilaVisible;
 
+    private JButton espacioProducto;
+    private Map<String, ImageIcon> imagenesProductos;
 
     public PanelComprador() {
-        this.setOpaque(false); // Fondo transparente
+        this.setOpaque(false);
         this.setLayout(null);
-
 
         // Botón "Mi billetera"
         botonComprar = new JButton("Mi billetera");
@@ -44,10 +45,8 @@ public class PanelComprador extends JPanel {
             botonFoto.setIcon(new ImageIcon(imagenRedimensionada));
             botonFoto.setFocusable(false);
             inventario.add(botonFoto);
-            botonesMonedas[i] = botonFoto; // almacenar el botón en el array
+            botonesMonedas[i] = botonFoto;
         }
-
-
 
         botonComprar.addActionListener(new ActionListener() {
             @Override
@@ -68,30 +67,59 @@ public class PanelComprador extends JPanel {
             }
         });
 
-// Panel para la mochila
+        // Panel para la mochila
         mochilaPanel = new JPanel();
         mochilaPanel.setBounds(20, 350, 160, 160);
         mochilaPanel.setBackground(Color.gray);
-        mochilaPanel.setLayout(new GridLayout(1, 1, 5, 5)); // 1 espacio para producto
+        mochilaPanel.setLayout(new GridLayout(1, 1, 5, 5));
         mochilaPanel.setVisible(false);
 
+        // Cargar imágenes de productos
+        imagenesProductos = new HashMap<>();
+        cargarImagenProducto("COCA", "/imagenes/producto1.png");
+        cargarImagenProducto("FANTA", "/imagenes/producto2.png");
+        cargarImagenProducto("SPRITE", "/imagenes/producto3.png");
+        cargarImagenProducto("SUPER8", "/imagenes/producto4.png");
+        cargarImagenProducto("SNIKERS", "/imagenes/producto5.png");
 
-
-
-        JButton espacioProducto = new JButton();
-        espacioProducto.setEnabled(false); // Inicialmente vacío
+        espacioProducto = new JButton();
+        espacioProducto.setFocusable(false);
+        espacioProducto.setContentAreaFilled(false); // sin fondo
+        espacioProducto.setBorderPainted(false);     // sin borde
         mochilaPanel.add(espacioProducto);
 
         this.add(botonComprar);
         this.add(inventario);
         this.add(botonMochila);
         this.add(mochilaPanel);
-
-
     }
+
+    private void cargarImagenProducto(String nombre, String ruta) {
+        java.net.URL url = getClass().getResource(ruta);
+        if (url != null) {
+            ImageIcon iconoOriginal = new ImageIcon(url);
+            Image img = iconoOriginal.getImage().getScaledInstance(160, 160, Image.SCALE_SMOOTH);
+            imagenesProductos.put(nombre, new ImageIcon(img));
+        } else {
+            System.err.println("No se encontró la imagen: " + ruta);
+        }
+    }
+
     public JButton[] getBotonesMonedas() {
         return botonesMonedas;
     }
+
+    public void setProductoEnMochila(String nombreProducto) {
+        if (nombreProducto != null && !nombreProducto.isEmpty() && imagenesProductos.containsKey(nombreProducto)) {
+            espacioProducto.setIcon(imagenesProductos.get(nombreProducto));
+            espacioProducto.setText("");
+        } else {
+            espacioProducto.setIcon(null);
+            espacioProducto.setText("");
+        }
+        System.out.println("Producto recibido en mochila: " + nombreProducto);
+    }
+
 
     @Override
     protected void paintComponent(Graphics g) {
