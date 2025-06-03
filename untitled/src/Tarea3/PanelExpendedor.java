@@ -2,7 +2,7 @@ package Tarea3;
 
 import javax.swing.*;
 import java.awt.*;
-import Tarea1.PrecioProducto; // <-- importa tu enum
+import Tarea1.PrecioProducto;
 
 public class PanelExpendedor extends JPanel{
 
@@ -16,6 +16,8 @@ public class PanelExpendedor extends JPanel{
             PrecioProducto.SUPER8,
             PrecioProducto.SNIKERS
     };
+    private int valorMonedaSeleccionada = 0;
+    private String productoSeleccionado = null;
 
     public PanelExpendedor() {
         this.setBackground(Color.lightGray);
@@ -40,20 +42,51 @@ public class PanelExpendedor extends JPanel{
         return botonesSeleccion;
     }
 
+    public void setValorMonedaSeleccionada(int valor){
+        this.valorMonedaSeleccionada = valor;
+        repaint(); // Redibujar el panel para que se actualice el valor mostrado
+    }
+
+    public void setProductoSeleccionado(String nombreProducto){
+        this.productoSeleccionado = nombreProducto;
+        repaint();
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
         int panelWidth = this.getWidth();
-        int boxWidth = 110;
-        int boxHeight = 50;
-        int boxX = panelWidth - boxWidth - 1;
-        int boxY = 0;
+        int boxWidth = 444;
+        int boxHeight = 137;
+        int boxX = panelWidth - boxWidth - 4;
+        int boxY = 4;
 
         g.setColor(Color.white);
         g.fillRect(boxX, boxY, boxWidth, boxHeight);
         g.setColor(Color.black);
         g.drawRect(boxX, boxY, boxWidth, boxHeight);
+
+        // Mostrar valor de moneda seleccionada
+        if (valorMonedaSeleccionada > 0) {
+            g.setFont(new Font("Arial", Font.PLAIN, 16));
+            String textoMoneda = "$" + valorMonedaSeleccionada;
+            int textWidth = g.getFontMetrics().stringWidth(textoMoneda);
+            int textX = boxX + (boxWidth - textWidth) / 2;
+            int textY = boxY + 30;
+            g.drawString(textoMoneda, textX, textY);
+        }
+
+        // Mostrar nombre del producto seleccionado
+        if (productoSeleccionado != null) {
+            g.setFont(new Font("Arial", Font.PLAIN, 16));
+            String textoProducto = "Producto: " + productoSeleccionado;
+            int textWidthProducto = g.getFontMetrics().stringWidth(textoProducto);
+            int textXProducto = boxX + (boxWidth - textWidthProducto) / 2;
+            int textYProducto = boxY + 60;
+            g.drawString(textoProducto, textXProducto, textYProducto);
+        }
+
 
         int panelHeight = this.getHeight();
         int rectWidth = 120, rectHeight = 500;

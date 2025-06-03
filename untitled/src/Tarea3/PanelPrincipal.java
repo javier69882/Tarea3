@@ -23,7 +23,7 @@ public class PanelPrincipal extends JPanel {
 
         // Crear el PanelExpendedor
         exp = new PanelExpendedor();
-        exp.setBounds(400, 100, 300, 600); // Posición y tamaño del PanelExpendedor
+        exp.setBounds(400, 0, 450, 792); // Posición y tamaño del PanelExpendedor
         com = new PanelComprador();
         com.setBounds(20, 100, 200, 600); // Posición y tamaño del PanelComprador
         // Agregar componentes al panel
@@ -42,7 +42,7 @@ public class PanelPrincipal extends JPanel {
             int j = i;
             botonesMonedas[i].addActionListener(e -> {
                 monedaSeleccionada = monedas[j];
-                JOptionPane.showMessageDialog(this, "Moneda de " + monedas[j].getValor() + " seleccionada.");
+                exp.setValorMonedaSeleccionada(monedaSeleccionada.getValor());
                 intentarCompra();
             });
         }
@@ -52,7 +52,7 @@ public class PanelPrincipal extends JPanel {
             int j = i;
             botonesProductos[i].addActionListener(e -> {
                 productoSeleccionado = productos[j];
-                JOptionPane.showMessageDialog(this, "Producto " + productos[j].name() + " seleccionado.");
+                exp.setProductoSeleccionado(productos[j].name());
                 intentarCompra();
             });
         }
@@ -67,12 +67,14 @@ public class PanelPrincipal extends JPanel {
             try {
                 Comprador comprador = new Comprador(monedaSeleccionada, productoSeleccionado, expendedorLogico);
                 JOptionPane.showMessageDialog(this, "Compraste: " + comprador.queAccionProducto() + "\nVuelto: " + comprador.cuantoVuelto());
-                } catch (Exception e) {
+            } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
             }
             // Resetea para la próxima compra
             monedaSeleccionada = null;
             productoSeleccionado = null;
+            exp.setValorMonedaSeleccionada(0);
+            exp.setProductoSeleccionado(null);
         }
     }
 
