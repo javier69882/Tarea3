@@ -69,7 +69,7 @@ public class PanelComprador extends JPanel {
 
         // Panel para la mochila
         mochilaPanel = new JPanel();
-        mochilaPanel.setBounds(20, 350, 160, 160);
+        mochilaPanel.setBounds(20, 350, 160, 200);
         mochilaPanel.setBackground(Color.gray);
         mochilaPanel.setLayout(new GridLayout(1, 1, 5, 5));
         mochilaPanel.setVisible(false);
@@ -109,16 +109,44 @@ public class PanelComprador extends JPanel {
         return botonesMonedas;
     }
 
-    public void setProductoEnMochila(String nombreProducto) {
-        if (nombreProducto != null && !nombreProducto.isEmpty() && imagenesProductos.containsKey(nombreProducto)) {
-            espacioProducto.setIcon(imagenesProductos.get(nombreProducto));
-            espacioProducto.setText("");
+    // --- NUEVO: método para normalizar el nombre del producto --- //
+    private String normalizaNombreProducto(String nombre) {
+        if (nombre == null) return null;
+        nombre = nombre.trim().toUpperCase();
+        switch (nombre) {
+            case "COCACOLA":
+            case "COCA":
+            case "COCA-COLA":
+                return "COCA";
+            case "FANTA":
+                return "FANTA";
+            case "SPRITE":
+                return "SPRITE";
+            case "SUPER8":
+            case "SUPER 8":
+                return "SUPER8";
+            case "SNICKERS":
+            case "SNIKERS":
+                return "SNIKERS";
+            default:
+                return nombre; // intentar usarlo tal cual
+        }
+    }
+
+
+    public void setProductoEnMochila(String nombreProducto, int numeroSerie) {
+        String nombreKey = normalizaNombreProducto(nombreProducto);
+        if (nombreKey != null && !nombreKey.isEmpty() && imagenesProductos.containsKey(nombreKey)) {
+            espacioProducto.setIcon(imagenesProductos.get(nombreKey));
+            espacioProducto.setText("Serie: " + numeroSerie);
+            espacioProducto.setHorizontalTextPosition(SwingConstants.CENTER);
+            espacioProducto.setVerticalTextPosition(SwingConstants.BOTTOM);
         } else {
             espacioProducto.setIcon(null);
             espacioProducto.setText("");
         }
-        System.out.println("Producto recibido en mochila: " + nombreProducto);
     }
+
 
 
     @Override

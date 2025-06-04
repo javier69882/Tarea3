@@ -26,6 +26,6 @@ public class Snickers extends Dulce{
      */
 
     public String accionProducto() {
-        return "snickers";
+        return "SNIKERS";
     }
 }

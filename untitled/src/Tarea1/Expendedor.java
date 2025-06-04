@@ -137,4 +137,39 @@ public class Expendedor {
 
      //   return precio;
    // }
+     // Devuelve el stock disponible para cada producto
+     public int getStock(PrecioProducto producto) {
+         switch (producto) {
+             case COCA:
+                 return depositoCocaCola.size();
+             case SPRITE:
+                 return depositoSprite.size();
+             case FANTA:
+                 return depositoFanta.size();
+             case SUPER8:
+                 return depositoSuper8.size();
+             case SNIKERS:
+                 return depositoSnickers.size();
+             default:
+                 return 0;
+         }
+     }
+
+    public void restockUnoDeCadaProducto(int contador) {
+        depositoCocaCola.vaciar();
+        depositoCocaCola.addElemento(new CocaCola(1000+contador));
+
+        depositoSprite.vaciar();
+        depositoSprite.addElemento(new Sprite(2000+contador));
+
+        depositoFanta.vaciar();
+        depositoFanta.addElemento(new Fanta(3000+contador));
+
+        depositoSuper8.vaciar();
+        depositoSuper8.addElemento(new Super8(4000+contador));
+
+        depositoSnickers.vaciar();
+        depositoSnickers.addElemento(new Snickers(5000+contador));
+    }
+
 }

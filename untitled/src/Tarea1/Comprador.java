@@ -8,6 +8,8 @@ package Tarea1;
 public class Comprador {
     private String sonido;
     private int vuelto;
+    private Producto productoComprado;
+
 // reemplazo cualBebida por cual Producto
 //cambio int por PrecioProducto
 
@@ -31,7 +33,10 @@ public class Comprador {
         limpiarVueltoAnterior(exp);
 // se cambia todo lo referente a bebida por producto
 
+
+
         Producto p = exp.comprarProducto(m, cualProducto);// comprarPrducto da error, por los throws
+        this.productoComprado = p;
         //asi que voy a disipar los throws en el constructor, para usarlos try y catch en el main
         //como sale en la pauta
         if (p == null) {
@@ -74,6 +79,10 @@ public class Comprador {
 // se cambia el queBebiste por queAccionProducto
     public String queAccionProducto() {
         return sonido;
+    }
+
+    public Producto getProducto() {
+        return this.productoComprado; // el campo donde guardas el producto comprado
     }
 }
 

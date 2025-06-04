@@ -12,7 +12,7 @@ public class PanelPrincipal extends JPanel {
     private Moneda monedaSeleccionada = null;
     private PrecioProducto productoSeleccionado = null;
     private Image fondo;
-
+    private int contadorRestock = 0;
     private String mensajeEstado = "";
     private String productoEntregado = "";
     private int vuelto = 0;
@@ -44,6 +44,9 @@ public class PanelPrincipal extends JPanel {
         for (int i = 0; i < botonesMonedas.length; i++) {
             int j = i;
             botonesMonedas[i].addActionListener(e -> {
+                exp.setMensajeEstado(""); // Limpiar mensaje anterior
+                exp.setProductoEntregado(""); // Limpiar mensaje de producto entregado
+                exp.setVuelto(0); // Limpiar mensaje del vuelto
                 monedaSeleccionada = monedas[j];
                 exp.setValorMonedaSeleccionada(monedaSeleccionada.getValor());
                 intentarCompra();
@@ -54,30 +57,42 @@ public class PanelPrincipal extends JPanel {
         for (int i = 0; i < botonesProductos.length; i++) {
             int j = i;
             botonesProductos[i].addActionListener(e -> {
+                exp.setMensajeEstado(""); // Limpiar mensaje anterior
+                exp.setProductoEntregado(""); // Limpiar mensaje de producto entregado
+                exp.setVuelto(0); // Limpiar mensaje del vuelto
                 productoSeleccionado = productos[j];
                 exp.setProductoSeleccionado(productos[j].name());
                 intentarCompra();
             });
         }
+
+        //restock
+        exp.setExpendedorLogico(expendedorLogico);
+
+        exp.setOnRestockCallback(() -> {
+            contadorRestock++;
+            expendedorLogico.restockUnoDeCadaProducto(contadorRestock);
+            exp.actualizarEstadoProductos(expendedorLogico);
+        });
     }
 
     private void intentarCompra() {
         if (monedaSeleccionada != null && productoSeleccionado != null) {
             try {
                 Comprador comprador = new Comprador(monedaSeleccionada, productoSeleccionado, expendedorLogico);
-                // Mostrar mensajes en panel
+                Producto productoComprado = comprador.getProducto();
                 exp.setMensajeEstado("Compra exitosa!");
-                String producto = comprador.queAccionProducto();
-                exp.setProductoEntregado(producto);
+                exp.setProductoEntregado(productoComprado.accionProducto());
                 exp.setVuelto(comprador.cuantoVuelto());
-                setProductoEnMochila(mapearNombreProducto(producto));
+                setProductoEnMochila(productoComprado.accionProducto(), productoComprado.getSerie());
             } catch (Exception e) {
                 exp.setMensajeEstado("Error: " + e.getMessage());
                 exp.setProductoEntregado("");
                 exp.setVuelto(0);
-                setProductoEnMochila(""); // Limpia la mochila si hay error
+                setProductoEnMochila("", 0); // Limpia la mochila si hay error
             }
-            // Resetear selección para la próxima compra
+            exp.actualizarEstadoProductos(expendedorLogico);
+
             monedaSeleccionada = null;
             productoSeleccionado = null;
             exp.setValorMonedaSeleccionada(0);
@@ -85,10 +100,12 @@ public class PanelPrincipal extends JPanel {
         }
     }
 
+
     // Método para actualizar la mochila en el PanelComprador
-    public void setProductoEnMochila(String producto) {
-        com.setProductoEnMochila(producto);
+    public void setProductoEnMochila(String producto, int serie) {
+        com.setProductoEnMochila(producto, serie);
     }
+
 
     public void setMensajeEstado(String mensaje) {
         this.mensajeEstado = mensaje;

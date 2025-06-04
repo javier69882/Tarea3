@@ -6,7 +6,13 @@ import Tarea1.PrecioProducto;
 
 public class PanelExpendedor extends JPanel {
 
+
+    private JButton botonRestock;
+    private Tarea1.Expendedor expendedorLogico; // Referencia al expendedor lógico
+    private Runnable onRestockCallback = null;   // Para actualizar desde PanelPrincipal si se necesita
+
     private ImageIcon[] productos;
+
     private JButton[] botonesSeleccion;
     private PrecioProducto[] productosEnum = {
             PrecioProducto.COCA,
@@ -15,6 +21,7 @@ public class PanelExpendedor extends JPanel {
             PrecioProducto.SUPER8,
             PrecioProducto.SNIKERS
     };
+    private boolean[] agotado = new boolean[productosEnum.length];
     private int valorMonedaSeleccionada = 0;
     private String productoSeleccionado = null;
 
@@ -39,6 +46,21 @@ public class PanelExpendedor extends JPanel {
             botonesSeleccion[i].setFocusable(false);
             this.add(botonesSeleccion[i]);
         }
+
+
+        botonRestock = new JButton("Restock");
+        botonRestock.setBounds(30, 20, 100, 30); // Ajusta posición a gusto
+        botonRestock.setFocusable(false);
+        this.add(botonRestock);
+
+        botonRestock.addActionListener(e -> {
+            if (expendedorLogico != null) {
+                // Usa el contadorRestock global desde PanelPrincipal
+                if (onRestockCallback != null) {
+                    onRestockCallback.run();
+                }
+            }
+        });
     }
 
     public JButton[] getBotonesSeleccion() {
@@ -61,6 +83,13 @@ public class PanelExpendedor extends JPanel {
         repaint();
     }
 
+    public void actualizarEstadoProductos(Tarea1.Expendedor expendedor) {
+        for (int i = 0; i < productosEnum.length; i++) {
+            agotado[i] = (expendedor.getStock(productosEnum[i]) == 0);
+        }
+        repaint();
+    }
+
     public void setProductoEntregado(String producto) {
         this.productoEntregado = producto;
         repaint();
@@ -70,6 +99,14 @@ public class PanelExpendedor extends JPanel {
         this.vuelto = vuelto;
         repaint();
     }
+
+    public void setExpendedorLogico(Tarea1.Expendedor expendedor) {
+        this.expendedorLogico = expendedor;
+    }
+    public void setOnRestockCallback(Runnable callback) {
+        this.onRestockCallback = callback;
+    }
+
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -148,21 +185,34 @@ public class PanelExpendedor extends JPanel {
         int espacio = 10;
 
         for (int i = 0; i < productos.length; i++) {
-            Image img = productos[i].getImage();
             int xImg = rectX + (rectWidth - imageWidth) / 2;
             int yImg = rectY + espacio + i * (imageHeight + espacio);
 
-            g.drawImage(img, xImg, yImg, imageWidth, imageHeight, this);
+            if (!agotado[i]) {
+                Image img = productos[i].getImage();
+                g.drawImage(img, xImg, yImg, imageWidth, imageHeight, this);
 
-            String textoPrecio = productosEnum[i].name() + "  $" + productosEnum[i].getPrecio();
-            g.setColor(Color.white);
-            g.fillRect(xImg, yImg + imageHeight - 10, imageWidth, 20);
-            g.setColor(Color.black);
-            g.drawString(textoPrecio, xImg + 5, yImg + imageHeight + 5);
+                String textoPrecio = productosEnum[i].name() + "  $" + productosEnum[i].getPrecio();
+                g.setColor(Color.white);
+                g.fillRect(xImg, yImg + imageHeight - 10, imageWidth, 20);
+                g.setColor(Color.black);
+                g.drawString(textoPrecio, xImg + 5, yImg + imageHeight + 5);
+
+                botonesSeleccion[i].setEnabled(true);
+            } else {
+                // Producto agotado: muestra solo el botón deshabilitado y "Agotado"
+                g.setColor(Color.gray);
+                g.fillRect(xImg, yImg, imageWidth, imageHeight);
+                g.setColor(Color.red.darker());
+                g.setFont(new Font("Arial", Font.PLAIN, 16));
+                g.drawString("AGOTADO", xImg + 10, yImg + imageHeight / 2);
+                botonesSeleccion[i].setEnabled(false); // Botón deshabilitado
+            }
 
             int xBtn = xImg + imageWidth + 10;
             int yBtn = yImg + (imageHeight - 30) / 2;
             botonesSeleccion[i].setBounds(xBtn, yBtn, 40, 30);
         }
+
     }
 }

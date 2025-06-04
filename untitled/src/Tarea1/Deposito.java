@@ -41,4 +41,11 @@ class Deposito<T> {
         }
         return null;
     }
+    public int size() {
+        return almacen.size();
+    }
+
+    public void vaciar() {
+        almacen.clear();
+    }
 }

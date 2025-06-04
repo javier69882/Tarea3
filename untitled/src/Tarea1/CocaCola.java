@@ -22,6 +22,6 @@ class CocaCola extends Bebida{
      */
 
     public String accionProducto() {
-        return "cocacola";
+        return "COCA";
     }
 }
