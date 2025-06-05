@@ -129,7 +129,7 @@ public class PanelComprador extends JPanel {
             case "SNIKERS":
                 return "SNIKERS";
             default:
-                return nombre; // intentar usarlo tal cual
+                return nombre;
         }
     }
 

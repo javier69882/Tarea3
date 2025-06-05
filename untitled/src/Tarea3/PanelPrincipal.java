@@ -1,7 +1,11 @@
 package Tarea3;
 
+import java.awt.Color;
+import java.awt.Image;
+import java.awt.Graphics;
+import java.util.List;
+import java.util.ArrayList;
 import javax.swing.*;
-import java.awt.*;
 import Tarea1.*;
 
 public class PanelPrincipal extends JPanel {
@@ -81,16 +85,24 @@ public class PanelPrincipal extends JPanel {
             try {
                 Comprador comprador = new Comprador(monedaSeleccionada, productoSeleccionado, expendedorLogico);
                 Producto productoComprado = comprador.getProducto();
+
+                int vuelto = comprador.cuantoVuelto();
+                List<Integer> monedas = calcularMonedas(vuelto);
+
                 exp.setMensajeEstado("Compra exitosa!");
                 exp.setProductoEntregado(productoComprado.accionProducto());
-                exp.setVuelto(comprador.cuantoVuelto());
+                exp.setVuelto(vuelto);
+                exp.setMonedasVuelto(monedas);
+
                 setProductoEnMochila(productoComprado.accionProducto(), productoComprado.getSerie());
             } catch (Exception e) {
                 exp.setMensajeEstado("Error: " + e.getMessage());
                 exp.setProductoEntregado("");
                 exp.setVuelto(0);
-                setProductoEnMochila("", 0); // Limpia la mochila si hay error
+                exp.setMonedasVuelto(new ArrayList<>());
+                setProductoEnMochila("", 0);
             }
+
             exp.actualizarEstadoProductos(expendedorLogico);
 
             monedaSeleccionada = null;
@@ -99,6 +111,19 @@ public class PanelPrincipal extends JPanel {
             exp.setProductoSeleccionado(null);
         }
     }
+
+    private List<Integer> calcularMonedas(int vuelto) {
+        List<Integer> monedas = new ArrayList<>();
+        int[] valores = {1000, 500, 100};
+        for (int valor : valores) {
+            while (vuelto >= valor) {
+                monedas.add(valor);
+                vuelto -= valor;
+            }
+        }
+        return monedas;
+    }
+
 
 
     // Método para actualizar la mochila en el PanelComprador
