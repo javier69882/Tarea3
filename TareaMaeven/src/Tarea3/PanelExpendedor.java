@@ -15,6 +15,7 @@ import Tarea1.Moneda1000;
 import Tarea1.Moneda1500;
 import Tarea1.Moneda;
 
+
 public class PanelExpendedor extends JPanel {
 
     private JButton botonRestock;
@@ -44,6 +45,7 @@ public class PanelExpendedor extends JPanel {
     private List<Rectangle> monedaAreas = new ArrayList<>();
     private Map<Integer, ImageIcon> imagenesMonedas = new HashMap<>();
 
+    private MusicaFondo musicaFondo ;
     public PanelExpendedor() {
         this.setBackground(Color.lightGray);
         this.setLayout(null);
@@ -85,6 +87,11 @@ public class PanelExpendedor extends JPanel {
             if (onCajaFuerteCallback != null) {
                 onCajaFuerteCallback.run();
             }
+
+
+            // Reproducir efecto de sonido
+            MusicaFondo musicaFondo = new MusicaFondo();
+            musicaFondo.reproducirEfecto("/Musica/caja_fuerte.wav");
         });
 
         // Listener para recoger monedas (vuelto)

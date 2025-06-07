@@ -2,6 +2,7 @@ package Tarea3;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -23,7 +24,8 @@ public class VentanaCajaFuerte extends JFrame {
 
         cargarImagenesMonedas();
 
-        setContentPane(new PanelCaja(monedas));
+        PanelCaja panelCaja = new PanelCaja(monedas);
+        setContentPane(panelCaja);
         setVisible(true);
     }
 
@@ -42,6 +44,18 @@ public class VentanaCajaFuerte extends JFrame {
         public PanelCaja(List<Moneda> monedas) {
             this.monedas = monedas;
             this.setBackground(Color.WHITE);
+
+            // Agregar MouseListener para cerrar la ventana al hacer clic
+            this.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    // Cerrar la ventana
+                    Window w = SwingUtilities.getWindowAncestor(PanelCaja.this);
+                    if (w != null) {
+                        w.dispose();
+                    }
+                }
+            });
         }
 
         @Override
@@ -70,11 +84,11 @@ public class VentanaCajaFuerte extends JFrame {
                 g.setColor(Color.BLACK);
                 g.drawString("Serie: " + serie, x, y + 80);
 
-                x += 100; // Aumentar espacio horizontal entre monedas
+                x += 100; //  espacio horizontal entre monedas
                 count++;
                 if (count % 10 == 0) { // 10 monedas por fila
                     x = 20;
-                    y += 120; // Aumentar espacio vertical entre filas
+                    y += 120; // espacio vertical entre filas
                 }
             }
 

@@ -21,6 +21,8 @@ public class PanelComprador extends JPanel {
     private JButton espacioProducto;
     private Map<String, ImageIcon> imagenesProductos;
 
+
+
     public PanelComprador() {
         this.setOpaque(false);
         this.setLayout(null);
@@ -53,6 +55,9 @@ public class PanelComprador extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 inventarioVisible = !inventarioVisible;
                 inventario.setVisible(inventarioVisible);
+
+                MusicaFondo musica = new MusicaFondo();
+                musica.reproducirEfecto("/Musica/Billetera.wav");
             }
         });
 
@@ -64,6 +69,9 @@ public class PanelComprador extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 mochilaVisible = !mochilaVisible;
                 mochilaPanel.setVisible(mochilaVisible);
+
+                MusicaFondo musica = new MusicaFondo();
+                musica.reproducirEfecto("/Musica/Mochila.wav");
             }
         });
 

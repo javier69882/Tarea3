@@ -18,12 +18,15 @@ public class PanelPrincipal extends JPanel {
     private Image fondo;
     private int contadorRestock = 0;
     private int serieMonedas = 0;
+    private MusicaFondo musicaFondo;
 
     private Deposito<Moneda> registroMonedas; // Aquí se guarda cada moneda usada en compras exitosas
 
     public PanelPrincipal() {
         this.setBackground(Color.white);
         this.setLayout(null);
+        musicaFondo = new MusicaFondo("/Musica/musicafondo.wav");
+        musicaFondo.reproducirLoop();
         fondo = new ImageIcon(getClass().getResource("/Fondo/fondo.png")).getImage();
         expendedorLogico = new Expendedor(1);
 
@@ -121,6 +124,12 @@ public class PanelPrincipal extends JPanel {
 
                 setProductoEnMochila(productoComprado.accionProducto(), productoComprado.getSerie());
 
+                //  Mostrar ventana GIF del producto comprado
+                SwingUtilities.invokeLater(() -> {
+                    new VentanaGifProducto(productoComprado.accionProducto());
+                });
+
+
                 // Incrementar el número de serie después de una compra exitosa
                 serieMonedas++;
             } catch (Exception e) {
@@ -139,6 +148,7 @@ public class PanelPrincipal extends JPanel {
             exp.setProductoSeleccionado(null);
         }
     }
+
 
     private List<Integer> calcularMonedas(int vuelto) {
         List<Integer> monedas = new ArrayList<>();
