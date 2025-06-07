@@ -46,7 +46,7 @@ public class PanelPrincipal extends JPanel {
                 PrecioProducto.SNIKERS
         };
 
-        // Cambia la creación de monedas: ahora se crea una nueva moneda con el número de serie correcto al apretar el botón
+
         JButton[] botonesMonedas = com.getBotonesMonedas();
         for (int i = 0; i < botonesMonedas.length; i++) {
             int j = i;
