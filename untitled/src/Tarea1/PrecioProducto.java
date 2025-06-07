@@ -9,11 +9,11 @@ package Tarea1;
 
 public enum PrecioProducto {
     //cambio COCACOLA por COCA, porque daba error
-    COCA(1200),
+    COCA(1000),
     FANTA(1200),
-    SPRITE(1200),
+    SPRITE(800),
     SUPER8(400),
-    SNIKERS(600);
+    SNIKERS(700);
 // se usa final para que no se modifiquen los precios
 
     private final int precio;

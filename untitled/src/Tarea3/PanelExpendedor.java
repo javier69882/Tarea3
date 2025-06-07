@@ -179,7 +179,7 @@ public class PanelExpendedor extends JPanel {
 
         if (vuelto > 0) {
             g.setFont(new Font("Arial", Font.BOLD, 10));
-            g.setColor(new Color(0, 128, 0));
+            g.setColor(new Color(7, 222, 7));
             g.drawString("Vuelto total: $" + vuelto, boxX + 10, y);
             y += 13;
         }
