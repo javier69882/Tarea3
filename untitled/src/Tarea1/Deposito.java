@@ -1,13 +1,14 @@
 package Tarea1;
 import java.util.ArrayList;
-// Modificacion con un deposito genrico, se quito el anterior deposito de moneda y bebida
+import java.util.List;
+// Modificacion con un deposito generico, se quito el anterior deposito de moneda y bebida
 /**
  * Clase Deposito que representa un deposito generico
  * Se usa para almacenar productos o monedas
  *
  * @param <T> El tipo de elemento que se va a almacenar en el deposito
  */
-class Deposito<T> {
+public class Deposito<T>{
     /**
      * Lista que almacena los elementos del deposito
      */
@@ -47,5 +48,8 @@ class Deposito<T> {
 
     public void vaciar() {
         almacen.clear();
+    }
+    public List<T> getElementos() {
+        return new ArrayList<>(almacen);
     }
 }

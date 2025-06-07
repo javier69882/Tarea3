@@ -17,66 +17,72 @@ public class PanelPrincipal extends JPanel {
     private PrecioProducto productoSeleccionado = null;
     private Image fondo;
     private int contadorRestock = 0;
-    private String mensajeEstado = "";
-    private String productoEntregado = "";
-    private int vuelto = 0;
+
+    private Deposito<Moneda> registroMonedas; // Aquí se guarda cada moneda usada en compras exitosas
 
     public PanelPrincipal() {
         this.setBackground(Color.white);
-        this.setLayout(null); // Diseño absoluto
-        // Cargar la imagen de fondo
+        this.setLayout(null);
         fondo = new ImageIcon(getClass().getResource("/Fondo/fondo.png")).getImage();
-        // Inicializar el expendedor lógico  con 1 producto de cada 1
         expendedorLogico = new Expendedor(1);
 
-        // Crear el PanelExpendedor
+        registroMonedas = new Deposito<>(); // Inicialización del deposito de monedas usadas
+
         exp = new PanelExpendedor();
-        exp.setBounds(400, 0, 450, 792); // Posición y tamaño del PanelExpendedor
+        exp.setBounds(400, 0, 450, 792);
         com = new PanelComprador();
-        com.setBounds(20, 100, 200, 600); // Posición y tamaño del PanelComprador
+        com.setBounds(20, 100, 200, 600);
 
-        this.add(exp); // Agregar el PanelExpendedor
-        this.add(com); // Agregar el PanelComprador
+        this.add(exp);
+        this.add(com);
 
-        // Monedas disponibles
         Moneda[] monedas = { new Moneda100(), new Moneda500(), new Moneda1000(), new Moneda1500() };
-        // Productos disponibles
-        PrecioProducto[] productos = { PrecioProducto.COCA, PrecioProducto.FANTA, PrecioProducto.SPRITE, PrecioProducto.SUPER8, PrecioProducto.SNIKERS };
+        PrecioProducto[] productos = {
+                PrecioProducto.COCA,
+                PrecioProducto.FANTA,
+                PrecioProducto.SPRITE,
+                PrecioProducto.SUPER8,
+                PrecioProducto.SNIKERS
+        };
 
-        // Listener para monedas (billetera)
         JButton[] botonesMonedas = com.getBotonesMonedas();
         for (int i = 0; i < botonesMonedas.length; i++) {
             int j = i;
             botonesMonedas[i].addActionListener(e -> {
-                exp.setMensajeEstado(""); // Limpiar mensaje anterior
-                exp.setProductoEntregado(""); // Limpiar mensaje de producto entregado
-                exp.setVuelto(0); // Limpiar mensaje del vuelto
+                exp.setMensajeEstado("");
+                exp.setProductoEntregado("");
+                exp.setVuelto(0);
                 monedaSeleccionada = monedas[j];
                 exp.setValorMonedaSeleccionada(monedaSeleccionada.getValor());
                 intentarCompra();
             });
         }
-        // Listener para productos (expendedor)
+
         JButton[] botonesProductos = exp.getBotonesSeleccion();
         for (int i = 0; i < botonesProductos.length; i++) {
             int j = i;
             botonesProductos[i].addActionListener(e -> {
-                exp.setMensajeEstado(""); // Limpiar mensaje anterior
-                exp.setProductoEntregado(""); // Limpiar mensaje de producto entregado
-                exp.setVuelto(0); // Limpiar mensaje del vuelto
+                exp.setMensajeEstado("");
+                exp.setProductoEntregado("");
+                exp.setVuelto(0);
                 productoSeleccionado = productos[j];
                 exp.setProductoSeleccionado(productos[j].name());
                 intentarCompra();
             });
         }
 
-        //restock
         exp.setExpendedorLogico(expendedorLogico);
 
         exp.setOnRestockCallback(() -> {
             contadorRestock++;
             expendedorLogico.restockUnoDeCadaProducto(contadorRestock);
             exp.actualizarEstadoProductos(expendedorLogico);
+        });
+
+        // Set callback para abrir ventana Caja Fuerte
+        exp.setOnCajaFuerteCallback(() -> {
+            List<Moneda> monedasCaja = getMonedasEnCajaFuerte();
+            exp.abrirVentanaCajaFuerteConMonedas(monedasCaja);
         });
     }
 
@@ -88,6 +94,9 @@ public class PanelPrincipal extends JPanel {
 
                 int vuelto = comprador.cuantoVuelto();
                 List<Integer> monedas = calcularMonedas(vuelto);
+
+                // Guardar la moneda usada en el registro de monedas
+                registroMonedas.addElemento(monedaSeleccionada);
 
                 exp.setMensajeEstado("Compra exitosa!");
                 exp.setProductoEntregado(productoComprado.accionProducto());
@@ -124,44 +133,17 @@ public class PanelPrincipal extends JPanel {
         return monedas;
     }
 
-
-
-    // Método para actualizar la mochila en el PanelComprador
     public void setProductoEnMochila(String producto, int serie) {
         com.setProductoEnMochila(producto, serie);
     }
 
-
-    public void setMensajeEstado(String mensaje) {
-        this.mensajeEstado = mensaje;
-        repaint();
-    }
-
-    public void setProductoEntregado(String producto) {
-        this.productoEntregado = producto;
-        repaint();
-    }
-
-    public void setVuelto(int vuelto) {
-        this.vuelto = vuelto;
-        repaint();
-    }
-
-    private String mapearNombreProducto(String nombreOriginal) {
-        return switch (nombreOriginal.toLowerCase()) {
-            case "coca" -> "COCA";
-            case "fanta" -> "FANTA";
-            case "sprite" -> "SPRITE";
-            case "super8" -> "SUPER8";
-            case "snikers" -> "SNIKERS";
-            default -> "";
-        };
+    public List<Moneda> getMonedasEnCajaFuerte() {
+        return registroMonedas.getElementos();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        // Dibujar la imagen de fondo
         if (fondo != null) {
             g.drawImage(fondo, 0, 0, getWidth(), getHeight(), this);
         }

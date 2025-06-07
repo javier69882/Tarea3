@@ -9,12 +9,19 @@ import java.util.Map;
 import java.util.HashMap;
 import Tarea1.PrecioProducto;
 import Tarea1.Expendedor;
+import Tarea1.Moneda100;
+import Tarea1.Moneda500;
+import Tarea1.Moneda1000;
+import Tarea1.Moneda1500;
+import Tarea1.Moneda;
 
 public class PanelExpendedor extends JPanel {
 
     private JButton botonRestock;
+    private JButton botonCajaFuerte;
     private Expendedor expendedorLogico;
     private Runnable onRestockCallback = null;
+    private Runnable onCajaFuerteCallback = null;
 
     private ImageIcon[] productos;
     private JButton[] botonesSeleccion;
@@ -61,13 +68,26 @@ public class PanelExpendedor extends JPanel {
         botonRestock.setFocusable(false);
         this.add(botonRestock);
 
+        // Botón Caja Fuerte
+        botonCajaFuerte = new JButton("Caja Fuerte");
+        botonCajaFuerte.setBounds(280, 700, 120, 30);
+        botonCajaFuerte.setFocusable(false);
+        this.add(botonCajaFuerte);
+
         botonRestock.addActionListener(e -> {
             if (expendedorLogico != null && onRestockCallback != null) {
                 onRestockCallback.run();
             }
         });
 
-        // Listener para recoger monedas
+        // Listener para abrir ventana de caja fuerte
+        botonCajaFuerte.addActionListener(e -> {
+            if (onCajaFuerteCallback != null) {
+                onCajaFuerteCallback.run();
+            }
+        });
+
+        // Listener para recoger monedas (vuelto)
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -82,6 +102,10 @@ public class PanelExpendedor extends JPanel {
                 }
             }
         });
+    }
+
+    public void abrirVentanaCajaFuerteConMonedas(List<Moneda> monedas) {
+        new VentanaCajaFuerte(monedas);
     }
 
     private void cargarImagenesMonedas() {
@@ -140,6 +164,10 @@ public class PanelExpendedor extends JPanel {
 
     public void setOnRestockCallback(Runnable callback) {
         this.onRestockCallback = callback;
+    }
+
+    public void setOnCajaFuerteCallback(Runnable callback) {
+        this.onCajaFuerteCallback = callback;
     }
 
     @Override
