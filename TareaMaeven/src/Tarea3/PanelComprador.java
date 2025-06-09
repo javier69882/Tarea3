@@ -7,23 +7,55 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * La clase {@code PanelComprador} representa un panel de usuario que permite simular
+ * la interacción de un comprador con una billetera virtual y una mochila de productos
+ * dentro de una interfaz gráfica Swing.
+ * <p>
+ * Incluye funcionalidades para:
+ * <ul>
+ *   <li>Mostrar un inventario de monedas (billetera)</li>
+ *   <li>Visualizar productos adquiridos en una mochila</li>
+ *   <li>Reproducir efectos de sonido al interactuar</li>
+ * </ul>
+ *
+ * Este panel es parte de una simulación de compra como en una máquina expendedora.
+ */
 public class PanelComprador extends JPanel {
 
+    /** Botón para mostrar/ocultar la billetera del usuario. */
     private JButton botonComprar;
+
+    /** Panel que contiene los botones con imágenes de monedas. */
     private JPanel inventario;
+
+    /** Bandera que indica si la billetera está visible. */
     private boolean inventarioVisible;
+
+    /** Botones que representan las distintas monedas disponibles. */
     private JButton[] botonesMonedas = new JButton[4];
 
+    /** Botón para mostrar/ocultar la mochila del usuario. */
     private JButton botonMochila;
+
+    /** Panel que muestra los productos adquiridos por el usuario. */
     private JPanel mochilaPanel;
+
+    /** Bandera que indica si la mochila está visible. */
     private boolean mochilaVisible;
 
+    /** Espacio para mostrar un producto dentro de la mochila. */
     private JButton espacioProducto;
+
+    /** Mapa que asocia el nombre del producto con su imagen. */
     private Map<String, ImageIcon> imagenesProductos;
 
-
-
+    /**
+     * Constructor que inicializa y configura todos los componentes gráficos
+     * del panel del comprador.
+     */
     public PanelComprador() {
+        // Configuración del panel principal
         this.setOpaque(false);
         this.setLayout(null);
 
@@ -39,6 +71,7 @@ public class PanelComprador extends JPanel {
         inventario.setLayout(new GridLayout(2, 2, 5, 5));
         inventario.setVisible(false);
 
+        // Carga de imágenes de monedas
         String[] nombresImagenes = {"100.png", "500.png", "1000.png", "1500.png"};
         for (int i = 0; i < nombresImagenes.length; i++) {
             JButton botonFoto = new JButton();
@@ -50,6 +83,7 @@ public class PanelComprador extends JPanel {
             botonesMonedas[i] = botonFoto;
         }
 
+        // Acción al presionar "Mi billetera"
         botonComprar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -61,6 +95,7 @@ public class PanelComprador extends JPanel {
             }
         });
 
+        // Botón y panel para la mochila
         botonMochila = new JButton("Mochila");
         botonMochila.setBounds(50, 300, 100, 40);
         botonMochila.setFocusable(false);
@@ -75,14 +110,13 @@ public class PanelComprador extends JPanel {
             }
         });
 
-        // Panel para la mochila
         mochilaPanel = new JPanel();
         mochilaPanel.setBounds(20, 350, 160, 200);
         mochilaPanel.setBackground(Color.gray);
         mochilaPanel.setLayout(new GridLayout(1, 1, 5, 5));
         mochilaPanel.setVisible(false);
 
-        // Cargar imágenes de productos
+        // Carga de imágenes de productos
         imagenesProductos = new HashMap<>();
         cargarImagenProducto("COCA", "/imagenes/producto1.png");
         cargarImagenProducto("FANTA", "/imagenes/producto2.png");
@@ -92,16 +126,20 @@ public class PanelComprador extends JPanel {
 
         espacioProducto = new JButton();
         espacioProducto.setFocusable(false);
-        espacioProducto.setContentAreaFilled(false); // sin fondo
-        espacioProducto.setBorderPainted(false);     // sin borde
+        espacioProducto.setContentAreaFilled(false);
+        espacioProducto.setBorderPainted(false);
         mochilaPanel.add(espacioProducto);
 
+        // Agregar componentes al panel principal
         this.add(botonComprar);
         this.add(inventario);
         this.add(botonMochila);
         this.add(mochilaPanel);
     }
 
+    /**
+     * Carga una imagen de producto y la asocia a un nombre clave.
+     */
     private void cargarImagenProducto(String nombre, String ruta) {
         java.net.URL url = getClass().getResource(ruta);
         if (url != null) {
@@ -113,11 +151,17 @@ public class PanelComprador extends JPanel {
         }
     }
 
+    /**
+     * Devuelve el arreglo de botones de monedas (billetera).
+     */
     public JButton[] getBotonesMonedas() {
         return botonesMonedas;
     }
 
-    // --- NUEVO: método para normalizar el nombre del producto --- //
+    /**
+     * Normaliza el nombre del producto para que coincida con los nombres
+     * de clave en el mapa de imágenes.
+     */
     private String normalizaNombreProducto(String nombre) {
         if (nombre == null) return null;
         nombre = nombre.trim().toUpperCase();
@@ -141,7 +185,9 @@ public class PanelComprador extends JPanel {
         }
     }
 
-
+    /**
+     * Muestra un producto en la mochila del usuario con su número de serie.
+     */
     public void setProductoEnMochila(String nombreProducto, int numeroSerie) {
         String nombreKey = normalizaNombreProducto(nombreProducto);
         if (nombreKey != null && !nombreKey.isEmpty() && imagenesProductos.containsKey(nombreKey)) {
@@ -155,8 +201,9 @@ public class PanelComprador extends JPanel {
         }
     }
 
-
-
+    /**
+     * Método sobrescrito para dibujar el componente personalizado.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

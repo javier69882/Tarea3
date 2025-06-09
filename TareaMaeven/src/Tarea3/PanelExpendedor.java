@@ -16,6 +16,12 @@ import Tarea1.Moneda1500;
 import Tarea1.Moneda;
 
 
+
+/**
+ * Clase que representa el panel gráfico del expendedor de productos.
+ * Permite seleccionar productos, ver saldo, recibir vuelto y acceder a la caja fuerte.
+ */
+
 public class PanelExpendedor extends JPanel {
 
     private JButton botonRestock;
@@ -46,6 +52,11 @@ public class PanelExpendedor extends JPanel {
     private Map<Integer, ImageIcon> imagenesMonedas = new HashMap<>();
 
     private MusicaFondo musicaFondo ;
+
+    /**
+     * Constructor que inicializa la interfaz del panel del expendedor.
+     */
+
     public PanelExpendedor() {
         this.setBackground(Color.lightGray);
         this.setLayout(null);
@@ -111,9 +122,17 @@ public class PanelExpendedor extends JPanel {
         });
     }
 
+    /**
+     * Abre una nueva ventana que muestra las monedas almacenadas en la caja fuerte.
+     */
+
     public void abrirVentanaCajaFuerteConMonedas(List<Moneda> monedas) {
         new VentanaCajaFuerte(monedas);
     }
+
+    /**
+     * Carga las imágenes asociadas a cada tipo de moneda.
+     */
 
     private void cargarImagenesMonedas() {
         int[] valores = {100, 500, 1000, 1500};
@@ -124,29 +143,53 @@ public class PanelExpendedor extends JPanel {
         }
     }
 
+    /**
+     * Establece las monedas devueltas al comprador como vuelto.
+     */
+
     public void setMonedasVuelto(List<Integer> monedas) {
         this.monedasVuelto = monedas;
         repaint();
     }
 
+    /**
+     * Devuelve los botones de selección de productos.
+     */
+
     public JButton[] getBotonesSeleccion() {
         return botonesSeleccion;
     }
+
+    /**
+     * Establece el valor de la moneda ingresada.
+     */
 
     public void setValorMonedaSeleccionada(int valor) {
         this.valorMonedaSeleccionada = valor;
         repaint();
     }
 
+    /**
+     * Establece el valor de la moneda ingresada.
+     */
+
     public void setProductoSeleccionado(String nombreProducto) {
         this.productoSeleccionado = nombreProducto;
         repaint();
     }
 
+    /**
+     * Establece el mensaje de estado a mostrar en la interfaz.
+     */
+
     public void setMensajeEstado(String mensaje) {
         this.mensajeEstado = mensaje;
         repaint();
     }
+
+    /**
+     * Actualiza el estado (agotado o disponible) de cada producto en base al expendedor.
+     */
 
     public void actualizarEstadoProductos(Expendedor expendedor) {
         for (int i = 0; i < productosEnum.length; i++) {
@@ -155,27 +198,51 @@ public class PanelExpendedor extends JPanel {
         repaint();
     }
 
+    /**
+     * Establece el producto que fue entregado al usuario..
+     */
+
     public void setProductoEntregado(String producto) {
         this.productoEntregado = producto;
         repaint();
     }
+
+    /**
+     * Establece el vuelto total a mostrar.
+     */
 
     public void setVuelto(int vuelto) {
         this.vuelto = vuelto;
         repaint();
     }
 
+    /**
+     * Asocia el panel con el objeto lógico del expendedor..
+     */
+
     public void setExpendedorLogico(Expendedor expendedor) {
         this.expendedorLogico = expendedor;
     }
+
+    /**
+     * Establece la acción a ejecutar cuando se presiona el botón de restock.
+     */
 
     public void setOnRestockCallback(Runnable callback) {
         this.onRestockCallback = callback;
     }
 
+    /**
+     * Establece la acción a ejecutar cuando se abre la caja fuerte.
+     */
+
     public void setOnCajaFuerteCallback(Runnable callback) {
         this.onCajaFuerteCallback = callback;
     }
+
+    /**
+     * Dibuja todos los elementos visuales del panel, incluyendo saldo, productos y vuelto.
+     */
 
     @Override
     protected void paintComponent(Graphics g) {

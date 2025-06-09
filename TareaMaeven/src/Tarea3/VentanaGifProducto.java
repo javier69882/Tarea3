@@ -5,9 +5,22 @@ import java.awt.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * Ventana emergente que muestra un GIF animado del producto comprado
+ * y reproduce un efecto de sonido para simular la entrega del producto.
+ * La ventana se cierra automáticamente después de 5 segundos.
+ *
+ * Ejemplo: Si el producto es "COCA", se buscará el archivo "/gifs/coca.gif".
+ */
+
 
 public class VentanaGifProducto extends JFrame {
     private MusicaFondo musicaFondo;
+
+    /**
+     * Constructor que crea y muestra una ventana animada con el producto adquirido.
+     * También reproduce un efecto de sonido de compra.
+     */
 
     public VentanaGifProducto(String producto) {
         MusicaFondo musicaFondo = new MusicaFondo();

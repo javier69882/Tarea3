@@ -8,7 +8,13 @@ import java.util.ArrayList;
 import javax.swing.*;
 import Tarea1.*;
 
-public class PanelPrincipal extends JPanel {
+/**
+ * Clase principal que representa el panel contenedor del expendedor y el comprador.
+ * Gestiona las interacciones entre la interfaz gráfica y la lógica del sistema.
+ * Permite comprar productos, recibir vuelto y acceder a la caja fuerte.
+ */
+
+public class PanelPrincipal extends JPanel{
 
     private PanelExpendedor exp;
     private PanelComprador com;
@@ -21,6 +27,10 @@ public class PanelPrincipal extends JPanel {
     private MusicaFondo musicaFondo;
 
     private Deposito<Moneda> registroMonedas; // Aquí se guarda cada moneda usada en compras exitosas
+
+    /**
+     * Constructor que inicializa el panel principal con los paneles de comprador y expendedor.
+     */
 
     public PanelPrincipal() {
         this.setBackground(Color.white);
@@ -105,6 +115,11 @@ public class PanelPrincipal extends JPanel {
         });
     }
 
+    /**
+     * Intenta realizar una compra usando la moneda y producto seleccionados.
+     * Si la compra es exitosa, se entrega el producto y se calcula el vuelto.
+     */
+
     private void intentarCompra() {
         if (monedaSeleccionada != null && productoSeleccionado != null) {
             try {
@@ -149,6 +164,10 @@ public class PanelPrincipal extends JPanel {
         }
     }
 
+    /**
+     * Calcula las monedas que se deben devolver como vuelto.
+     * Usa monedas de 1000, 500 y 100 en ese orden.
+     */
 
     private List<Integer> calcularMonedas(int vuelto) {
         List<Integer> monedas = new ArrayList<>();
@@ -162,13 +181,25 @@ public class PanelPrincipal extends JPanel {
         return monedas;
     }
 
+    /**
+     * Establece el producto comprado en la mochila visual del comprador.
+     */
+
     public void setProductoEnMochila(String producto, int serie) {
         com.setProductoEnMochila(producto, serie);
     }
 
+    /**
+     * Devuelve la lista de monedas registradas en la caja fuerte (compras exitosas).
+     */
+
     public List<Moneda> getMonedasEnCajaFuerte() {
         return registroMonedas.getElementos();
     }
+
+    /**
+     * Pinta el fondo del panel principal.
+     */
 
     @Override
     protected void paintComponent(Graphics g) {

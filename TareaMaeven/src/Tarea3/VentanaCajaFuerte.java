@@ -8,10 +8,20 @@ import java.util.Map;
 import java.util.HashMap;
 import Tarea1.Moneda;
 
+/**
+ * Ventana que representa la caja fuerte donde se almacenan las monedas usadas en las compras exitosas.
+ * Muestra gráficamente cada moneda con su valor y número de serie.
+ * La ventana se cierra al hacer clic en cualquier parte del panel.
+ */
+
 public class VentanaCajaFuerte extends JFrame {
 
     private List<Moneda> monedas;
     private Map<Integer, ImageIcon> imagenesMonedas;
+
+    /**
+     * Constructor que inicializa la ventana y carga las monedas a mostrar.
+     */
 
     public VentanaCajaFuerte(List<Moneda> monedas) {
         this.monedas = monedas;
@@ -29,6 +39,10 @@ public class VentanaCajaFuerte extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Carga las imágenes correspondientes a las monedas (100, 500, 1000, 1500).
+     */
+
     private void cargarImagenesMonedas() {
         int[] valores = {100, 500, 1000, 1500};
         for (int valor : valores) {
@@ -38,8 +52,17 @@ public class VentanaCajaFuerte extends JFrame {
         }
     }
 
+    /**
+     * Panel interno que muestra gráficamente las monedas y sus números de serie.
+     * Al hacer clic en el panel, la ventana se cierra.
+     */
+
     private class PanelCaja extends JPanel {
         private List<Moneda> monedas;
+
+        /**
+         * Constructor que configura el panel para mostrar las monedas y cerrar al hacer clic.
+         */
 
         public PanelCaja(List<Moneda> monedas) {
             this.monedas = monedas;
@@ -57,6 +80,11 @@ public class VentanaCajaFuerte extends JFrame {
                 }
             });
         }
+
+        /**
+         * Dibuja todas las monedas almacenadas con sus imágenes y series,
+         * y muestra el total acumulado..
+         */
 
         @Override
         protected void paintComponent(Graphics g) {
